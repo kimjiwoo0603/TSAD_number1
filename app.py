@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="TSAD Decision Studio",
     page_icon="◈",
     layout="wide",
-    initial_sidebar_state="auto",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -93,8 +93,8 @@ def inject_css() -> None:
       #MainMenu, footer { visibility:hidden; }
       [data-testid="stHeader"] { background:transparent; height:0; }
       [data-testid="stAppDeployButton"], [data-testid="stToolbarActions"], [data-testid="stMainMenu"] { display:none !important; }
-      [data-testid="stExpandSidebarButton"] { background:var(--navy); border:1px solid #2d405d; border-radius:8px; color:#fff !important; left:16px; position:fixed; top:14px; z-index:1000; }
-      [data-testid="stExpandSidebarButton"] * { color:#fff !important; }
+      /* The workspace has no persistent rail: controls live in the top control room. */
+      [data-testid="stSidebar"], [data-testid="stExpandSidebarButton"] { display:none !important; }
       .block-container { max-width:1440px; padding:40px 48px 72px; }
       [data-testid="stSidebar"] { background:var(--navy); border-right:1px solid #372755; }
       [data-testid="stSidebar"] > div:first-child { background:var(--navy); }
@@ -173,6 +173,80 @@ def inject_css() -> None:
       .architecture-card strong { color:var(--ink); font-size:14px; }
       .architecture-card span { color:var(--muted); font-size:12px; line-height:1.65; }
       .architecture-join { color:var(--primary); font-size:24px; font-weight:400; padding-top:35px; text-align:center; }
+      .top-brand { align-items:center; display:flex; gap:10px; min-height:46px; }
+      .top-brand__symbol { align-items:center; background:linear-gradient(145deg, #8b5cf6, #4c1d95); border:1px solid rgba(255,255,255,.25); border-radius:12px; box-shadow:0 9px 22px rgba(74,35,147,.22); color:#fff; display:inline-flex; font-size:17px; height:38px; justify-content:center; transition:transform .22s cubic-bezier(.2,.9,.25,1), box-shadow .22s ease; width:38px; }
+      .top-brand:hover .top-brand__symbol { box-shadow:0 13px 26px rgba(74,35,147,.3); transform:rotate(12deg) scale(1.08); }
+      .top-brand strong { color:var(--ink); display:block; font-size:16px; font-weight:780; letter-spacing:-.06em; line-height:1; }
+      .top-brand small { color:var(--muted); display:block; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:8px; font-weight:700; letter-spacing:.12em; margin-top:5px; }
+      .workspace-rule { background:linear-gradient(90deg, #7c3aed 0%, #b99cf8 28%, rgba(185,156,248,.18) 72%, transparent 100%); height:1px; margin:14px 0 31px; }
+      [data-testid="stMain"] [data-testid="stRadioGroup"] { align-items:center; display:flex; flex-direction:row; flex-wrap:wrap; gap:5px; justify-content:center; }
+      [data-testid="stMain"] label[data-testid="stRadioOption"] { align-items:center; background:transparent; border:1px solid transparent; border-radius:999px; cursor:pointer; display:inline-flex; min-height:38px; padding:0 13px; transition:background .2s ease, border-color .2s ease, box-shadow .24s ease, transform .24s cubic-bezier(.2,.9,.25,1); }
+      [data-testid="stMain"] label[data-testid="stRadioOption"]:hover { background:#efe9fc; border-color:#ded0fa; transform:translateY(-1px) scale(1.025); }
+      [data-testid="stMain"] label[data-testid="stRadioOption"][data-selected="true"] { background:linear-gradient(135deg, #7c3aed, #5b21b6); border-color:#6d35d8; box-shadow:0 8px 18px rgba(103,56,192,.25); transform:translateY(-2px) scale(1.055); }
+      [data-testid="stMain"] label[data-testid="stRadioOption"] p { color:#655b75; font-size:12px; font-weight:670; letter-spacing:-.018em; }
+      [data-testid="stMain"] label[data-testid="stRadioOption"][data-selected="true"] p { color:#fff; }
+      [data-testid="stMain"] label[data-testid="stRadioOption"] > div > div > div:first-child { display:none; }
+      [data-testid="stPopover"] > button { align-items:center; background:#fff; border:1px solid #d9cff0; border-radius:10px; color:#4c3572; display:flex; font-size:12px; font-weight:720; justify-content:center; min-height:40px; padding:0 13px; transition:border-color .2s ease, box-shadow .2s ease, transform .2s cubic-bezier(.2,.9,.25,1); width:100%; }
+      [data-testid="stPopover"] > button:hover, [data-testid="stPopover"] > button[aria-expanded="true"] { border-color:#9f7aea; box-shadow:0 9px 20px rgba(94,56,170,.15); transform:translateY(-2px) scale(1.045); }
+      [data-testid="stPopoverBody"] { background:#fff !important; border:1px solid #ded3f3 !important; border-radius:14px !important; box-shadow:0 20px 48px rgba(48,29,83,.2) !important; padding:7px 8px 13px !important; }
+      .control-kicker { color:#7652ba; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:9px; font-weight:750; letter-spacing:.12em; margin:7px 4px 3px; }
+      .control-copy { color:var(--muted); font-size:11px; line-height:1.5; margin:0 4px 13px; }
+      [data-testid="stPopoverBody"] [data-testid="stWidgetLabel"] p { color:#61576f; font-size:11px; font-weight:680; }
+      [data-testid="stPopoverBody"] hr { border-color:#eee8f7; margin:15px 0; }
+      [data-testid="stPopoverBody"] [data-testid="stSlider"] { padding:0 4px; }
+      .stButton > button:active, [data-testid="stPopover"] > button:active { transform:translateY(1px) scale(.97); }
+      /* Editorial product-site direction: generous white space, strong type,
+         and a single feature canvas rather than a dashboard full of boxes. */
+      .stApp { background:#fff; }
+      .block-container { max-width:1380px; padding:24px 42px 84px; }
+      .workspace-rule { background:#16121d; margin:16px 0 0; opacity:.92; }
+      .top-brand__symbol { background:#17121e; border-radius:8px; box-shadow:none; }
+      .top-brand:hover .top-brand__symbol { box-shadow:0 9px 18px rgba(44,24,78,.18); }
+      .top-brand strong { font-size:17px; }
+      .top-brand small { color:#736b7f; }
+      [data-testid="stMain"] label[data-testid="stRadioOption"][data-selected="true"] { background:#17121e; border-color:#17121e; box-shadow:none; }
+      [data-testid="stPopover"] > button { border-color:#1b1622; border-radius:0; color:#17121e; }
+      [data-testid="stPopover"] > button:hover, [data-testid="stPopover"] > button[aria-expanded="true"] { border-color:#6d36ca; box-shadow:0 7px 0 rgba(109,54,202,.15); }
+      .hero { background:transparent; border:0; border-radius:0; color:#17121e; margin:0; overflow:visible; padding:82px 18px 64px; text-align:center; }
+      .hero:before, .hero:after { display:none; }
+      .eyebrow { color:#6937c8; font-size:11px; letter-spacing:.11em; margin-bottom:18px; }
+      .hero h1 { color:#17121e; font-size:clamp(38px, 5vw, 68px); font-weight:790; letter-spacing:-.078em; line-height:1.05; margin:0 auto 20px; max-width:940px; }
+      .hero p { color:#756e7b; font-size:15px; line-height:1.72; margin:0 auto; max-width:620px; }
+      .decision-canvas { background:#191225; color:#fff; display:grid; grid-template-columns:1.08fr .92fr; margin:0 0 64px; min-height:358px; overflow:hidden; position:relative; }
+      .decision-canvas:before { background:radial-gradient(circle, rgba(148,99,255,.74) 0%, rgba(148,99,255,0) 68%); content:""; height:470px; position:absolute; right:-105px; top:-188px; width:470px; }
+      .decision-canvas__copy { align-items:flex-start; display:flex; flex-direction:column; justify-content:space-between; padding:36px 38px; position:relative; z-index:1; }
+      .decision-canvas__label { color:#c7adff; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:750; letter-spacing:.12em; }
+      .decision-canvas h2 { font-size:clamp(33px, 4vw, 54px); font-weight:760; letter-spacing:-.07em; line-height:.98; margin:24px 0 15px; }
+      .decision-canvas p { color:#d8cee8; font-size:14px; line-height:1.65; margin:0; max-width:470px; }
+      .decision-canvas__tag { border:1px solid rgba(255,255,255,.26); color:#f5efff; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; letter-spacing:.07em; padding:8px 10px; }
+      .decision-canvas__signal { align-items:center; display:flex; justify-content:center; padding:28px; position:relative; z-index:1; }
+      .signal-orbit { align-items:center; border:1px solid rgba(224,209,255,.32); border-radius:50%; display:flex; height:238px; justify-content:center; position:relative; width:238px; }
+      .signal-orbit:before, .signal-orbit:after { border:1px solid rgba(224,209,255,.22); border-radius:50%; content:""; position:absolute; }
+      .signal-orbit:before { height:174px; width:174px; }
+      .signal-orbit:after { height:304px; width:304px; }
+      .signal-core { align-items:center; background:#fff; border-radius:50%; box-shadow:0 0 0 15px rgba(190,155,255,.16), 0 24px 48px rgba(0,0,0,.24); color:#1b1226; display:flex; flex-direction:column; height:106px; justify-content:center; position:relative; width:106px; }
+      .signal-core strong { font-size:24px; font-weight:780; letter-spacing:-.07em; }
+      .signal-core span { color:#705b86; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:8px; font-weight:700; letter-spacing:.08em; margin-top:4px; }
+      .signal-dot { background:#b993ff; border-radius:50%; box-shadow:0 0 0 6px rgba(185,147,255,.12); height:10px; position:absolute; right:24px; top:52px; width:10px; }
+      .section-title { font-size:28px; font-weight:760; letter-spacing:-.06em; margin-bottom:8px; }
+      .section-sub { color:#7a7380; font-size:14px; margin-bottom:26px; }
+      .metric-box { background:#f7f6f8; border:0; border-radius:0; min-height:136px; padding:20px; }
+      .metric-box:hover { box-shadow:none; transform:translateY(-4px); }
+      .metric-kicker { color:#7153a9; }
+      .metric-value { font-size:27px; }
+      .recommendation { background:#f0eaff; border:0; border-left:4px solid #6430c7; border-radius:0; box-shadow:none; padding:29px; }
+      .recommendation:after { background:rgba(106,52,200,.12); }
+      .recommendation h2 { color:#1b102c; font-size:32px; }
+      .recommendation p { color:#5c4d70; }
+      .recommendation .badge { background:#fff; border-color:#d6c3f8; color:#5422ad; }
+      .evidence { border-left-color:#221631; padding:13px 0 13px 16px; }
+      .evidence:hover { border-left-color:#6834cb; }
+      .evidence strong { font-size:14px; }
+      div[data-testid="stMetric"] { border-bottom-color:#17121e; }
+      div[data-testid="stMetric"]:first-of-type { border-top-color:#17121e; }
+      [data-testid="stPlotlyChart"] { border-color:#e5e1e9; border-radius:0; padding:8px; }
+      .model-card { border-radius:0; }
+      .roadmap-card, .architecture-card { border-radius:0; }
       .app-intro { align-items:center; animation:intro-out .7s ease 1.6s forwards; background:radial-gradient(circle at 68% 28%, #5d3693 0%, #241437 42%, #120d20 100%); color:#fff; display:flex; flex-direction:column; inset:0; justify-content:center; padding:24px; pointer-events:none; position:fixed; text-align:center; z-index:999999; }
       .app-intro__halo { animation:halo-pulse 1.6s ease-in-out infinite; border:1px solid rgba(222,208,255,.38); border-radius:50%; height:146px; position:absolute; width:146px; }
       .app-intro__mark { animation:intro-rise .55s cubic-bezier(.2,.8,.2,1) both; background:rgba(237,229,255,.12); border:1px solid rgba(237,229,255,.28); border-radius:18px; box-shadow:0 20px 48px rgba(0,0,0,.22); color:#fff; font-size:24px; font-weight:760; letter-spacing:-.06em; padding:18px 20px; }
@@ -186,15 +260,18 @@ def inject_css() -> None:
       @keyframes card-enter { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
       @media (prefers-reduced-motion: reduce) { *, *:before, *:after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
       @media (max-width: 900px) {
-        .block-container { padding:28px 28px 56px; }
+        .block-container { padding:24px 28px 64px; }
         .hero { margin-bottom:34px; padding:30px; }
+        .decision-canvas { grid-template-columns:1fr; }
+        .decision-canvas__copy { min-height:255px; }
+        .decision-canvas__signal { min-height:210px; padding:0 28px 34px; }
       }
       @media (max-width: 768px) {
         .block-container { padding:20px 16px 44px; }
         [data-testid="stSidebar"] { min-width:min(304px, 84vw) !important; max-width:84vw !important; }
         [data-testid="stSidebar"] [data-testid="stSidebarContent"] { padding:24px 14px 32px; }
         .hero { border-radius:12px; margin-bottom:30px; padding:25px 20px; }
-        .hero h1 { font-size:28px; line-height:1.18; }
+        .hero h1 { font-size:39px; line-height:1.08; }
         .hero p { font-size:13px; line-height:1.65; }
         .section-title { font-size:20px; }
         .section-sub { margin-bottom:16px; }
@@ -206,6 +283,16 @@ def inject_css() -> None:
         [data-testid="stPlotlyChart"] { padding:2px; }
         .roadmap-card { min-height:auto; }
         .architecture-join { padding:0; text-align:left; }
+        .top-brand { margin-top:2px; }
+        [data-testid="stMain"] [data-testid="stRadioGroup"] { justify-content:flex-start; overflow-x:auto; padding:2px 0 7px; scrollbar-width:none; flex-wrap:nowrap; }
+        [data-testid="stMain"] label[data-testid="stRadioOption"] { flex:none; padding:0 12px; }
+        [data-testid="stPopover"] > button { justify-content:flex-start; }
+        .decision-canvas { margin-bottom:42px; }
+        .decision-canvas__copy { min-height:240px; padding:27px 24px; }
+        .decision-canvas h2 { font-size:40px; }
+        .signal-orbit { height:188px; width:188px; }
+        .signal-orbit:before { height:136px; width:136px; }
+        .signal-orbit:after { height:244px; width:244px; }
       }
     </style>
     """, unsafe_allow_html=True)
@@ -289,6 +376,15 @@ def dashboard(percent: int, target_rows: int, vram: float, perf_weight: int, rea
     performance = OBSERVED_VUS.get(recommendation, {}).get(q)
 
     hero("운영 조건을 선택하고, 다음 의사결정 지점을 찾으세요.", "Dev18 결과를 기업 환경 입력과 함께 해석합니다. 추천은 자동 교체 지시가 아니라, 다음 검증·전환 논의를 위한 설명 가능한 후보입니다.")
+    st.markdown(
+        f"<section class='decision-canvas'>"
+        f"<div class='decision-canvas__copy'><div><div class='decision-canvas__label'>YOUR DECISION CANVAS</div>"
+        f"<h2>{recommendation}<br>at {q}%.</h2><p>현재 데이터 단계와 인프라 조건이 교차하는 지점을 읽어, 다음 검증에서 우선 볼 모델 후보를 제안합니다.</p></div>"
+        f"<span class='decision-canvas__tag'>NEXT REVIEW · {upcoming if upcoming else 'FINAL'}%</span></div>"
+        f"<div class='decision-canvas__signal'><div class='signal-orbit'><span class='signal-dot'></span><div class='signal-core'><strong>{q}%</strong><span>CHECKPOINT</span></div></div></div>"
+        f"</section>",
+        unsafe_allow_html=True,
+    )
     st.markdown("<div class='section-title'>현재 운영 상태</div><p class='section-sub'>입력된 정상 데이터와 인프라 조건을 실험의 공통 비교 지점에 매핑했습니다.</p>", unsafe_allow_html=True)
     a, b, c, d = st.columns(4)
     for col, kicker, value, note in [
@@ -393,21 +489,42 @@ def evidence() -> None:
 
 inject_css()
 show_intro()
-st.sidebar.markdown("<div class='sidebar-logo'>◈ TSAD<br>Decision Studio</div><div class='sidebar-caption'>EVIDENCE-BOUND ADVISORY</div>", unsafe_allow_html=True)
-page = st.sidebar.radio("Navigation", ["Decision studio", "Model portfolio", "Evidence & roadmap"], label_visibility="collapsed")
-st.sidebar.markdown("---")
-st.sidebar.markdown("**기업 환경 입력**")
-target_rows = st.sidebar.number_input("목표 정상 데이터 rows", min_value=10_000, max_value=10_000_000, value=100_000, step=10_000)
-percent = st.sidebar.slider("현재 정상 데이터 확보율", min_value=5, max_value=100, value=27, step=1, format="%d%%")
-vram = st.sidebar.number_input("사용 가능 GPU VRAM (GiB)", min_value=0.0, max_value=256.0, value=16.0, step=1.0)
-realtime = st.sidebar.toggle("Real-time 탐지", value=True)
-daily_rows = st.sidebar.number_input("하루 처리 데이터 (rows)", min_value=1_000, max_value=100_000_000, value=100_000, step=1_000)
-st.sidebar.markdown("---")
-st.sidebar.markdown("**의사결정 가정**")
-perf_weight = st.sidebar.slider("성능 중요도", min_value=0, max_value=100, value=70, help="높을수록 Dev18 성능에 더 큰 가중치를 둡니다. 실제 cost index가 확정되면 교체하세요.")
-acquisition_per_10k = st.sidebar.number_input("정상 데이터 1만 rows 확보비용 (₩)", min_value=0, max_value=100_000_000, value=300_000, step=10_000)
-gpu_hourly = st.sidebar.number_input("GPU 시간당 비용 가정 (₩)", min_value=0, max_value=100_000, value=4_000, step=500)
-st.sidebar.markdown("<div class='sidebar-caption' style='margin-top:22px'>DEV18 · PROTOTYPE<br>NOT A PRODUCTION CLAIM</div>", unsafe_allow_html=True)
+
+# A compact command bar replaces the conventional left rail.  The exact input
+# widgets and their values are intentionally kept intact so the decision logic
+# below remains unchanged.
+brand, navigation, controls = st.columns([1.05, 2.45, 0.82], gap="small")
+with brand:
+    st.markdown(
+        "<div class='top-brand'><span class='top-brand__symbol'>◈</span>"
+        "<div><strong>TSAD</strong><small>DECISION STUDIO</small></div></div>",
+        unsafe_allow_html=True,
+    )
+with navigation:
+    st.markdown("<div class='workspace-nav'>", unsafe_allow_html=True)
+    page = st.radio(
+        "Workspace navigation",
+        ["Decision studio", "Model portfolio", "Evidence & roadmap"],
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+    st.markdown("</div>", unsafe_allow_html=True)
+with controls:
+    with st.popover("환경 설정"):
+        st.markdown("<div class='control-kicker'>CONTROL ROOM</div><p class='control-copy'>입력값을 바꾸면 아래 의사결정 화면이 즉시 다시 계산됩니다.</p>", unsafe_allow_html=True)
+        target_rows = st.number_input("목표 정상 데이터 rows", min_value=10_000, max_value=10_000_000, value=100_000, step=10_000)
+        percent = st.slider("현재 정상 데이터 확보율", min_value=5, max_value=100, value=27, step=1, format="%d%%")
+        vram = st.number_input("사용 가능 GPU VRAM (GiB)", min_value=0.0, max_value=256.0, value=16.0, step=1.0)
+        realtime = st.toggle("Real-time 탐지", value=True)
+        daily_rows = st.number_input("하루 처리 데이터 (rows)", min_value=1_000, max_value=100_000_000, value=100_000, step=1_000)
+        st.markdown("---")
+        st.markdown("<div class='control-kicker'>DECISION ASSUMPTIONS</div>", unsafe_allow_html=True)
+        perf_weight = st.slider("성능 중요도", min_value=0, max_value=100, value=70, help="높을수록 Dev18 성능에 더 큰 가중치를 둡니다. 실제 cost index가 확정되면 교체하세요.")
+        acquisition_per_10k = st.number_input("정상 데이터 1만 rows 확보비용 (₩)", min_value=0, max_value=100_000_000, value=300_000, step=10_000)
+        gpu_hourly = st.number_input("GPU 시간당 비용 가정 (₩)", min_value=0, max_value=100_000, value=4_000, step=500)
+        st.caption("DEV18 · PROTOTYPE · NOT A PRODUCTION CLAIM")
+
+st.markdown("<div class='workspace-rule'></div>", unsafe_allow_html=True)
 
 if page == "Decision studio":
     dashboard(percent, int(target_rows), vram, perf_weight, realtime, int(daily_rows), acquisition_per_10k, gpu_hourly)
@@ -415,3 +532,4 @@ elif page == "Model portfolio":
     portfolio()
 else:
     evidence()
+
