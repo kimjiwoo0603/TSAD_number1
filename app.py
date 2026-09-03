@@ -223,7 +223,7 @@ def dashboard(percent: int, target_rows: int, vram: float, perf_weight: int, rea
         fig.add_annotation(x=x, y=1, text=f"<b>{label}</b><br><span style='font-size:10px'>{sub}</span>", showarrow=False, yshift=43 if x != 10 else -44, font=dict(color="#17324d", size=12), align="center")
     fig.add_vline(x=q, line_color="#45d5b0", line_width=3)
     fig.add_annotation(x=q, y=1, text="현재", showarrow=False, yshift=-78, font=dict(color="#177f68", size=11))
-    fig.update_layout(height=205, margin=dict(l=10, r=10, t=35, b=20), plot_bgcolor="#ffffff", paper_bgcolor="#f5f8fc", xaxis=dict(tickvals=CHECKPOINTS, ticksuffix="%", showgrid=False, zeroline=False), yaxis=dict(visible=False, range=[.5,1.5]), showlegend=False)
+    fig.update_layout(height=270, margin=dict(l=10, r=10, t=78, b=72), plot_bgcolor="#ffffff", paper_bgcolor="#f5f8fc", xaxis=dict(tickvals=CHECKPOINTS, ticksuffix="%", showgrid=False, zeroline=False), yaxis=dict(visible=False, range=[.3,1.7]), showlegend=False)
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     st.markdown("<div class='section-title'>Unavailable / review required</div>", unsafe_allow_html=True)
