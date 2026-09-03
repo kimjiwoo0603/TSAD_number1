@@ -27,6 +27,6 @@ streamlit run app.py
 - PaAno 40%의 0.331은 전달된 brief의 전환 예시를 후보 시각화에 사용했으며, 전체 결과 파일로 대체해야 합니다.
 - 비용, FP/FN 손실, 통계적 유의성 및 현장 일반화는 아직 최종 주장으로 표시하지 않습니다.
 
-## Repository integration
+## Repository layout
 
-이 폴더를 원본 저장소의 최상위에 복사한 뒤, `.streamlit/config.toml` 또는 배포 설정을 저장소 표준에 맞춰 추가하면 됩니다. 이 작업 환경에서는 GitHub TLS 자격 증명 오류 때문에 원격 저장소를 자동 clone/push하지 못했습니다.
+앱은 저장소 최상위의 `app.py`로 실행됩니다. 테마 설정은 `.streamlit/config.toml`, 의존성은 `requirements.txt`에 포함되어 있습니다.
