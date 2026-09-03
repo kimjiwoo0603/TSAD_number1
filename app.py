@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="TSAD Decision Studio",
     page_icon="◈",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 
@@ -81,39 +81,113 @@ PALETTE = {"MWVAR": "#8da2b6", "GDN": "#45d5b0", "PaAno": "#7b8cff", "TSPulse": 
 def inject_css() -> None:
     st.markdown("""
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
-      :root { --ink:#0b1726; --paper:#f5f8fc; --navy:#101f35; --muted:#6a788b; --line:#dce5ef; --mint:#45d5b0; --violet:#7b8cff; --amber:#eeae57; }
-      .stApp { background: var(--paper); color:var(--ink); font-family:'Manrope', sans-serif; }
-      #MainMenu, footer, header {visibility:hidden;}
-      [data-testid="stSidebar"] { background: #101f35; }
-      [data-testid="stSidebar"] * { color:#eaf1f7 !important; }
-      [data-testid="stSidebar"] .stRadio label { border-radius: 9px; padding: 5px 8px; }
-      .block-container { padding: 1.8rem 3rem 3.2rem; max-width:1500px; }
-      .hero { background: radial-gradient(circle at 88% 18%, #24496d 0, #101f35 43%, #0a1425 100%); border-radius:18px; padding:34px 38px 31px; color:white; margin-bottom:22px; position:relative; overflow:hidden; }
-      .hero:after { content:''; position:absolute; right:5%; top:-95px; width:280px; height:280px; border:1px solid rgba(129,174,211,.28); border-radius:50%; box-shadow:0 0 0 33px rgba(129,174,211,.08), 0 0 0 67px rgba(129,174,211,.04); }
-      .eyebrow { color:#65dfc0; font:500 12px 'DM Mono', monospace; letter-spacing:.12em; text-transform:uppercase; margin-bottom:11px; }
-      .hero h1 { font-size:34px; letter-spacing:-.045em; margin:0 0 11px; line-height:1.12; position:relative; z-index:1; }
-      .hero p { max-width:710px; color:#c3d2df; font-size:14px; margin:0; line-height:1.7; position:relative; z-index:1; }
-      .section-title { font-weight:800; font-size:19px; letter-spacing:-.035em; margin:24px 0 5px; }
-      .section-sub { color:var(--muted); font-size:13px; margin:0 0 14px; }
-      .metric-box { border:1px solid var(--line); border-radius:13px; padding:15px 17px; background:#fff; min-height:100px; }
-      .metric-kicker { color:#718096; font:500 10px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.08em; }
-      .metric-value { font-size:25px; font-weight:800; letter-spacing:-.05em; margin-top:6px; color:#12253b; }
-      .metric-note { color:#758397; font-size:11px; margin-top:4px; }
-      .recommendation { background:linear-gradient(115deg,#e8fbf5,#f6fffc); border:1px solid #bdebdc; padding:22px 24px; border-radius:14px; }
-      .recommendation h2 { margin:4px 0 5px; color:#143f39; font-size:25px; letter-spacing:-.045em; }
-      .recommendation p { margin:0; color:#3b635d; font-size:13px; }
-      .badge { display:inline-block; border-radius:100px; padding:4px 8px; font:500 10px 'DM Mono',monospace; background:#e9eef4; color:#445365; }
-      .warn { background:#fff8e9; border:1px solid #f1d696; border-radius:11px; color:#68521d; padding:12px 14px; font-size:12px; line-height:1.55; }
-      .evidence { background:#fff; border:1px solid var(--line); border-radius:12px; padding:15px 17px; margin:8px 0; }
-      .evidence strong { font-size:14px; }
-      .evidence span { color:#708092; font-size:12px; }
-      .stButton button { background:#172c47; color:white; border:0; border-radius:8px; font-weight:700; }
-      div[data-testid="stMetric"] { background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 14px; }
-      div[data-testid="stMetricLabel"] { font-size:11px; color:#758397; }
-      div[data-testid="stMetricValue"] { font-size:23px; color:#12253b; }
-      .sidebar-logo { font-weight:800; font-size:18px; letter-spacing:-.04em; }
-      .sidebar-caption { font:11px 'DM Mono',monospace; opacity:.65; letter-spacing:.07em; margin-bottom:25px; }
+      :root {
+        --bg: #f7f8fa; --surface: #ffffff; --surface-subtle: #f1f4f8;
+        --ink: #172033; --muted: #667085; --quiet: #98a2b3; --line: #e4e7ec;
+        --navy: #111c2f; --navy-soft: #1a2a43; --primary: #3b67dc;
+        --primary-soft: #eef2ff; --success: #16756a; --success-soft: #e8f7f3;
+        --warning: #a15c06; --warning-soft: #fff7e8; --radius: 12px;
+      }
+      * { box-sizing: border-box; }
+      .stApp { background:var(--bg); color:var(--ink); font-family:Inter, Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      #MainMenu, footer { visibility:hidden; }
+      [data-testid="stHeader"] { background:transparent; height:0; }
+      [data-testid="stAppDeployButton"], [data-testid="stToolbarActions"], [data-testid="stMainMenu"] { display:none !important; }
+      [data-testid="stExpandSidebarButton"] { background:var(--navy); border:1px solid #2d405d; border-radius:8px; color:#fff !important; left:16px; position:fixed; top:14px; z-index:1000; }
+      [data-testid="stExpandSidebarButton"] * { color:#fff !important; }
+      .block-container { max-width:1440px; padding:40px 48px 72px; }
+      [data-testid="stSidebar"] { background:var(--navy); border-right:1px solid #20304a; }
+      [data-testid="stSidebar"] > div:first-child { background:var(--navy); }
+      [data-testid="stSidebar"] [data-testid="stSidebarContent"] { padding:28px 16px 32px; }
+      [data-testid="stSidebar"] * { color:#edf2f8 !important; }
+      [data-testid="stSidebar"] hr { border-color:#2a3a54 !important; margin:24px 0 !important; }
+      [data-testid="stSidebar"] [data-testid="stRadio"] > div { gap:4px; }
+      [data-testid="stSidebar"] [data-testid="stRadio"] label { min-height:38px; border:1px solid transparent; border-radius:8px; padding:7px 9px; transition:background .16s ease, border-color .16s ease; }
+      [data-testid="stSidebar"] [data-testid="stRadio"] label:hover { background:#172842; }
+      [data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) { background:var(--navy-soft); border-color:#304562; }
+      [data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) p { color:#fff !important; font-weight:650; }
+      [data-testid="stSidebar"] [data-testid="stRadio"] input { accent-color:#7da4ff; }
+      [data-testid="stSidebar"] [data-testid="stWidgetLabel"] p { color:#c9d4e4 !important; font-size:12px; font-weight:600; letter-spacing:-.01em; }
+      [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] > p > strong { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#9eb0c8 !important; }
+      .sidebar-logo { color:#fff; font-size:19px; font-weight:760; letter-spacing:-.045em; line-height:1.18; }
+      .sidebar-caption { color:#9eb0c8 !important; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:600; letter-spacing:.1em; margin:7px 0 28px; }
+      .hero { background:var(--navy); border:1px solid #1e304b; border-radius:14px; color:#fff; margin-bottom:42px; padding:34px 38px 36px; }
+      .eyebrow { color:#a9c0ff; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:14px; }
+      .hero h1 { max-width:840px; font-size:clamp(30px, 3vw, 40px); font-weight:760; letter-spacing:-.055em; line-height:1.16; margin:0 0 14px; text-wrap:balance; }
+      .hero p { max-width:690px; color:#c3ccda; font-size:14px; line-height:1.75; margin:0; }
+      .section-title { color:var(--ink); font-size:22px; font-weight:730; letter-spacing:-.045em; line-height:1.3; margin:0 0 6px; }
+      .section-sub { color:var(--muted); font-size:13px; line-height:1.65; margin:0 0 20px; }
+      .metric-box { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); min-height:112px; padding:18px; transition:border-color .16s ease, transform .16s ease; }
+      .metric-box:hover { border-color:#cbd5e1; transform:translateY(-1px); }
+      .metric-kicker { color:var(--muted); font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:650; letter-spacing:.08em; text-transform:uppercase; }
+      .metric-value { color:var(--ink); font-size:25px; font-weight:740; letter-spacing:-.055em; line-height:1.2; margin-top:10px; }
+      .metric-note { color:var(--muted); font-size:11px; line-height:1.45; margin-top:9px; }
+      .recommendation { background:var(--navy); border:1px solid #263b59; border-radius:var(--radius); padding:26px; }
+      .recommendation h2 { color:#fff; font-size:28px; font-weight:730; letter-spacing:-.055em; line-height:1.15; margin:10px 0 10px; }
+      .recommendation p { color:#c6d2e2; font-size:13px; line-height:1.65; margin:0; }
+      .badge { background:var(--surface-subtle); border:1px solid #dfe5ee; border-radius:999px; color:#475467; display:inline-flex; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:650; letter-spacing:.02em; padding:4px 8px; }
+      .recommendation .badge { background:#203452; border-color:#315174; color:#dce8ff; }
+      .evidence { background:transparent; border-left:2px solid #cbd5e1; border-radius:0; color:#344054; margin:0; padding:10px 0 10px 14px; }
+      .evidence + .evidence { border-top:1px solid var(--line); }
+      .evidence strong { color:#344054; font-size:13px; font-weight:600; line-height:1.55; }
+      .evidence span { color:var(--muted); font-size:12px; line-height:1.6; }
+      .warn { background:var(--warning-soft); border:1px solid #f4ddb1; border-left:3px solid #d89a31; border-radius:8px; color:#765116; font-size:12px; line-height:1.65; padding:13px 15px; }
+      div[data-testid="stMetric"] { background:transparent; border:0; border-bottom:1px solid var(--line); border-radius:0; padding:13px 0; }
+      div[data-testid="stMetric"]:first-of-type { border-top:1px solid var(--line); }
+      div[data-testid="stMetricLabel"] { color:var(--muted); font-size:12px; font-weight:560; }
+      div[data-testid="stMetricValue"] { color:var(--ink); font-size:25px; font-weight:720; letter-spacing:-.045em; }
+      [data-baseweb="input"] { background:var(--surface) !important; border-color:#d0d5dd !important; border-radius:8px !important; box-shadow:none !important; min-height:42px; transition:border-color .15s ease, box-shadow .15s ease; }
+      [data-baseweb="input"]:focus-within { border-color:var(--primary) !important; box-shadow:0 0 0 3px rgba(59,103,220,.13) !important; }
+      [data-baseweb="input"] input { color:var(--ink) !important; font-size:13px !important; }
+      [data-testid="stSidebar"] [data-baseweb="input"] { background:#172842 !important; border-color:#344761 !important; }
+      [data-testid="stSidebar"] [data-baseweb="input"] input { color:#fff !important; }
+      [data-testid="stSlider"] [role="slider"] { border-color:var(--primary) !important; background:var(--primary) !important; }
+      [data-testid="stSlider"] div[data-testid="stTickBar"] { opacity:.65; }
+      [data-testid="stToggle"] [data-checked="true"] { background-color:var(--primary) !important; }
+      .stButton > button { align-items:center; background:var(--primary); border:1px solid var(--primary); border-radius:8px; color:#fff; font-size:13px; font-weight:650; min-height:40px; padding:0 15px; transition:background .15s ease, border-color .15s ease, transform .15s ease; }
+      .stButton > button:hover { background:#2e57c4; border-color:#2e57c4; transform:translateY(-1px); }
+      .stButton > button:focus-visible { box-shadow:0 0 0 3px rgba(59,103,220,.2); }
+      [data-testid="stDataFrame"] { border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+      [data-testid="stDataFrame"] [role="columnheader"] { background:#f8fafc !important; color:#475467 !important; font-size:11px !important; font-weight:650 !important; }
+      [data-testid="stPlotlyChart"] { border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--surface); padding:6px; }
+      [data-testid="stCaptionContainer"] { color:var(--muted); font-size:11px; line-height:1.6; }
+      .roadmap-card { border:1px solid var(--line); border-top:3px solid #cad5f6; border-radius:var(--radius); background:var(--surface); min-height:278px; padding:20px; }
+      .roadmap-card--available { border-top-color:#55a995; }
+      .roadmap-card--measure { border-top-color:#7e91d7; }
+      .roadmap-card--decide { border-top-color:#d6a454; }
+      .roadmap-card strong { color:var(--ink); font-size:14px; font-weight:700; letter-spacing:-.02em; }
+      .roadmap-card div { border-bottom:1px solid var(--line); color:#667085; font-size:12px; line-height:1.45; padding:10px 0; }
+      .roadmap-card div:last-child { border-bottom:0; }
+      .model-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); min-height:178px; padding:20px; transition:border-color .16s ease, transform .16s ease; }
+      .model-card:hover { border-color:#cbd5e1; transform:translateY(-1px); }
+      .model-card strong { color:var(--ink); display:inline-block; font-size:18px; font-weight:720; letter-spacing:-.04em; margin:12px 0 6px; }
+      .model-card span:last-child { color:var(--muted); display:block; font-size:12px; line-height:1.65; }
+      .architecture-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); min-height:138px; padding:20px; }
+      .architecture-card strong { color:var(--ink); font-size:14px; }
+      .architecture-card span { color:var(--muted); font-size:12px; line-height:1.65; }
+      .architecture-join { color:var(--primary); font-size:24px; font-weight:400; padding-top:35px; text-align:center; }
+      @media (max-width: 900px) {
+        .block-container { padding:28px 28px 56px; }
+        .hero { margin-bottom:34px; padding:30px; }
+      }
+      @media (max-width: 768px) {
+        .block-container { padding:20px 16px 44px; }
+        [data-testid="stSidebar"] { min-width:min(304px, 84vw) !important; max-width:84vw !important; }
+        [data-testid="stSidebar"] [data-testid="stSidebarContent"] { padding:24px 14px 32px; }
+        .hero { border-radius:12px; margin-bottom:30px; padding:25px 20px; }
+        .hero h1 { font-size:28px; line-height:1.18; }
+        .hero p { font-size:13px; line-height:1.65; }
+        .section-title { font-size:20px; }
+        .section-sub { margin-bottom:16px; }
+        .metric-box { min-height:auto; padding:16px; }
+        .recommendation { padding:21px 19px; }
+        .recommendation h2 { font-size:25px; }
+        .main [data-testid="stHorizontalBlock"] { flex-wrap:wrap !important; gap:12px !important; }
+        .main [data-testid="stHorizontalBlock"] > [data-testid="column"] { flex:1 1 100% !important; min-width:100% !important; width:100% !important; }
+        [data-testid="stPlotlyChart"] { padding:2px; }
+        .roadmap-card { min-height:auto; }
+        .architecture-join { padding:0; text-align:left; }
+      }
     </style>
     """, unsafe_allow_html=True)
 
@@ -257,7 +331,7 @@ def portfolio() -> None:
         for col, name in [(c1, first), (c2, second)]:
             item = MODEL_DATA[name]
             gpu = "공통 후보 불가" if item["gpu_gib"] is None else ("GPU 불필요" if item["gpu_gib"] == 0 else f"peak {item['gpu_gib']:.2f} GiB")
-            col.markdown(f"<div class='evidence'><span class='badge'>{item['tier']} · {item['status']}</span><br><br><strong>{name}</strong><br><span>{item['kind']} · {item['desc']}<br><br>학습: {item['training']} &nbsp; | &nbsp; GPU: {gpu} &nbsp; | &nbsp; Latency: {item['latency']}</span></div>", unsafe_allow_html=True)
+            col.markdown(f"<div class='model-card'><span class='badge'>{item['tier']} · {item['status']}</span><br><strong>{name}</strong><span>{item['kind']} · {item['desc']}<br><br>학습: {item['training']} &nbsp; | &nbsp; GPU: {gpu} &nbsp; | &nbsp; Latency: {item['latency']}</span></div>", unsafe_allow_html=True)
     st.markdown("<div class='warn'><b>해석 가드레일</b><br>‘Tier 3 = 저비용’, ‘40% = PaAno의 실제 최소 데이터량’, ‘Dev18 우세 = 현장 일반화’는 현재 근거로 주장하지 않습니다. 각 항목은 본 실험의 비용·외부 검증으로 확인해야 합니다.</div>", unsafe_allow_html=True)
 
 
@@ -265,21 +339,21 @@ def evidence() -> None:
     hero("근거의 경계를 보여주는 것이 기업용 신뢰의 시작입니다.", "대시보드는 관측값, 사용자 입력, 그리고 추가 측정이 필요한 항목을 의도적으로 분리합니다.", "EVIDENCE & ROADMAP")
     cols = st.columns(3)
     sections = [
-        ("01 · 지금 사용 가능", "#e8fbf5", ["데이터 확보율별 선택 가능 모델", "Dev18 VUS-PR (제공된 수치)", "GPU peak memory", "모델 recipe · 채널 제약", "Cold start · switching timeline"]),
-        ("02 · 본 실험 측정", "#eef0ff", ["1K / 10K / 100K inference time", "checkpoint별 재학습 시간", "GPU-hour · CPU-hour · peak RAM", "checkpoint / artifact storage", "GHL25 · HAI external validation"]),
-        ("03 · 방법론 확정", "#fff7e5", ["GPU 시간당 비용 benchmark", "Data acquisition cost 입력 방식", "Cost index 정규화", "FP / FN threshold cost function", "전환 가치 및 latency 기준"]),
+        ("01 · 지금 사용 가능", "roadmap-card--available", ["데이터 확보율별 선택 가능 모델", "Dev18 VUS-PR (제공된 수치)", "GPU peak memory", "모델 recipe · 채널 제약", "Cold start · switching timeline"]),
+        ("02 · 본 실험 측정", "roadmap-card--measure", ["1K / 10K / 100K inference time", "checkpoint별 재학습 시간", "GPU-hour · CPU-hour · peak RAM", "checkpoint / artifact storage", "GHL25 · HAI external validation"]),
+        ("03 · 방법론 확정", "roadmap-card--decide", ["GPU 시간당 비용 benchmark", "Data acquisition cost 입력 방식", "Cost index 정규화", "FP / FN threshold cost function", "전환 가치 및 latency 기준"]),
     ]
-    for col, (title, color, items) in zip(cols, sections):
-        body = "".join(f"<div style='padding:8px 0;border-bottom:1px solid #dbe5ec;font-size:12px'>{x}</div>" for x in items)
-        col.markdown(f"<div style='background:{color};border-radius:13px;padding:18px;border:1px solid #dce5ef;min-height:280px'><strong>{title}</strong><div style='margin-top:12px'>{body}</div></div>", unsafe_allow_html=True)
+    for col, (title, tone, items) in zip(cols, sections):
+        body = "".join(f"<div>{x}</div>" for x in items)
+        col.markdown(f"<div class='roadmap-card {tone}'><strong>{title}</strong><div style='margin-top:12px'>{body}</div></div>", unsafe_allow_html=True)
     st.markdown("<div class='section-title'>Cost architecture</div><p class='section-sub'>서로 성격이 다른 비용을 하나의 근거 없는 숫자로 합치지 않습니다.</p>", unsafe_allow_html=True)
     a, arrow, b = st.columns([1,.15,1])
     with a:
-        st.markdown("<div class='evidence'><strong>Computational cost</strong><br><span>연구에서 직접 측정: GPU / CPU 시간, 메모리, 추론 시간, storage.<br>→ cloud GPU benchmark로 비용 추정</span></div>", unsafe_allow_html=True)
+        st.markdown("<div class='architecture-card'><strong>Computational cost</strong><br><span>연구에서 직접 측정: GPU / CPU 시간, 메모리, 추론 시간, storage.<br>→ cloud GPU benchmark로 비용 추정</span></div>", unsafe_allow_html=True)
     with arrow:
-        st.markdown("<div style='font-size:30px;text-align:center;padding-top:22px;color:#7b8cff'>+</div>", unsafe_allow_html=True)
+        st.markdown("<div class='architecture-join'>+</div>", unsafe_allow_html=True)
     with b:
-        st.markdown("<div class='evidence'><strong>Data investment cost</strong><br><span>기업별 입력: 정상 운전 비용, 센서 운영, 저장, 기회비용.<br>→ 현재 데이터에서 다음 checkpoint까지의 투자 추정</span></div>", unsafe_allow_html=True)
+        st.markdown("<div class='architecture-card'><strong>Data investment cost</strong><br><span>기업별 입력: 정상 운전 비용, 센서 운영, 저장, 기회비용.<br>→ 현재 데이터에서 다음 checkpoint까지의 투자 추정</span></div>", unsafe_allow_html=True)
     st.markdown("<div class='section-title'>Recommended experimental log</div>", unsafe_allow_html=True)
     st.code("checkpoint, model, seed, normal_rows, train_seconds, inference_rows, inference_seconds, gpu_hours, cpu_hours, peak_vram_gib, peak_ram_gib, artifact_mb, vus_pr, family, run_id", language="text")
     st.caption("위 스키마의 CSV/JSONL을 연결하면, 현재 prototype의 정적 evidence 영역을 재현 가능한 실험 데이터로 교체할 수 있습니다.")
