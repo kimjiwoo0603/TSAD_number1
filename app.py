@@ -322,6 +322,29 @@ def inject_css() -> None:
       .recommendation-actions { display:flex; gap:10px; margin:24px auto 0; max-width:1120px; }
       .recommendation-actions [data-testid="stButton"] { flex:1; }
       .recommendation-actions .stButton > button { border-radius:0; width:100%; }
+      .start-stage { align-items:center; background:#100a18; color:#fff; display:flex; flex-direction:column; justify-content:center; margin:0 calc(50% - 50vw) 0; min-height:calc(100vh - 8px); overflow:hidden; padding:70px 24px; position:relative; text-align:center; }
+      .start-stage:before { background:radial-gradient(circle at 50% 42%, rgba(155,93,255,.8), rgba(155,93,255,.12) 22%, transparent 52%); content:""; height:1200px; left:50%; position:absolute; top:50%; transform:translate(-50%,-50%); width:1200px; }
+      .start-stage:after { animation:signal-scan 4.2s linear infinite; background:linear-gradient(90deg, transparent, rgba(215,182,255,.7), transparent); content:""; height:1px; left:-20%; position:absolute; top:0; width:140%; }
+      .start-stage__grid { background-image:linear-gradient(rgba(217,191,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(217,191,255,.08) 1px, transparent 1px); background-size:64px 64px; inset:0; mask-image:radial-gradient(ellipse at center, black, transparent 71%); opacity:.36; position:absolute; }
+      .signal-logo { align-items:center; animation:brand-arrival 1.1s cubic-bezier(.16,1,.3,1) both; display:flex; flex-direction:column; position:relative; z-index:1; }
+      .signal-logo__aperture { filter:drop-shadow(0 0 28px rgba(175,126,255,.34)); height:auto; margin-bottom:8px; overflow:visible; width:clamp(210px, 28vw, 360px); }
+      .signal-logo__aperture .aperture-trace { animation:trace-draw 2.3s cubic-bezier(.25,.85,.3,1) infinite alternate; fill:none; stroke:url(#aperture-gradient); stroke-dasharray:360; stroke-dashoffset:0; stroke-linecap:round; stroke-width:6; }
+      .signal-logo__aperture .aperture-trace--inner { animation-delay:.28s; opacity:.76; stroke-width:4; }
+      .signal-logo__aperture .aperture-core { animation:core-breathe 2.1s ease-in-out infinite; fill:#f6f0ff; }
+      .signal-logo__aperture .aperture-ring { animation:ring-turn 6s linear infinite; fill:none; stroke:rgba(225,207,255,.55); stroke-width:2; transform-origin:150px 126px; }
+      .signal-logo__name { color:#fff; font-size:clamp(34px, 5vw, 52px); font-weight:800; letter-spacing:-.08em; line-height:1; margin-top:14px; }
+      .signal-logo__sub { color:#d9c7ff; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:clamp(10px, 1.4vw, 14px); font-weight:700; letter-spacing:.42em; margin:16px 0 15px; padding-left:.42em; }
+      .start-stage__statement { color:#eee7f8; font-size:clamp(16px, 2vw, 22px); letter-spacing:-.035em; line-height:1.5; margin:0; max-width:540px; position:relative; z-index:1; }
+      .start-stage__cue { animation:cue-pulse 1.8s ease-in-out infinite; bottom:32px; color:#bda3ef; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:700; letter-spacing:.13em; position:absolute; }
+      .unknown-choice { background:#f0ebf8; border-left:3px solid #6b32cc; color:#4c4059; font-size:12px; line-height:1.55; margin:0 0 17px; padding:11px 13px; }
+      .unknown-choice [data-testid="stCheckbox"] { margin-bottom:0; }
+      .unknown-choice [data-testid="stCheckbox"] label p { color:#2b2037; font-size:12px; font-weight:720; }
+      @keyframes brand-arrival { from { opacity:0; transform:scale(.82) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+      @keyframes trace-draw { from { opacity:.3; stroke-dashoffset:215; } to { opacity:1; stroke-dashoffset:0; } }
+      @keyframes core-breathe { 0%,100% { filter:drop-shadow(0 0 0 rgba(220,190,255,0)); transform:scale(.92); transform-origin:150px 126px; } 50% { filter:drop-shadow(0 0 12px rgba(226,200,255,.9)); transform:scale(1.08); transform-origin:150px 126px; } }
+      @keyframes ring-turn { to { transform:rotate(360deg); } }
+      @keyframes signal-scan { 0% { top:-4%; opacity:0; } 15% { opacity:1; } 86% { opacity:1; } 100% { top:104%; opacity:0; } }
+      @keyframes cue-pulse { 0%,100% { opacity:.45; transform:translateY(0); } 50% { opacity:1; transform:translateY(-5px); } }
       .app-intro { align-items:center; animation:intro-out .7s ease 1.6s forwards; background:radial-gradient(circle at 68% 28%, #5d3693 0%, #241437 42%, #120d20 100%); color:#fff; display:flex; flex-direction:column; inset:0; justify-content:center; padding:24px; pointer-events:none; position:fixed; text-align:center; z-index:999999; }
       .app-intro__halo { animation:halo-pulse 1.6s ease-in-out infinite; border:1px solid rgba(222,208,255,.38); border-radius:50%; height:146px; position:absolute; width:146px; }
       .app-intro__mark { animation:intro-rise .55s cubic-bezier(.2,.8,.2,1) both; background:rgba(237,229,255,.12); border:1px solid rgba(237,229,255,.28); border-radius:18px; box-shadow:0 20px 48px rgba(0,0,0,.22); color:#fff; font-size:24px; font-weight:760; letter-spacing:-.06em; padding:18px 20px; }
@@ -374,6 +397,8 @@ def inject_css() -> None:
         .paper-grid { grid-template-columns:1fr; }
         .paper-section__heading { align-items:flex-start; flex-direction:column; gap:4px; }
         .recommendation-actions { flex-direction:column; }
+        .start-stage { min-height:90vh; padding:54px 18px; }
+        .signal-logo__sub { letter-spacing:.25em; padding-left:.25em; }
       }
     </style>
     """, unsafe_allow_html=True)
@@ -483,7 +508,7 @@ def default_profile() -> dict[str, object]:
         "latency": "1 min 이내", "retraining": "월 1회", "cpu": 4, "ram": 16,
         "vram": 16.0, "daily_rows": 100_000, "perf_weight": 70,
         "acquisition_per_10k": 300_000, "gpu_hourly": 4_000,
-        "upload_note": "파일 미업로드 · 입력값 기반 프로파일",
+        "upload_note": "파일 미업로드 · 입력값 기반 프로파일", "data_known": True, "infra_known": True,
     }
 
 
@@ -491,16 +516,27 @@ def decision_window() -> None:
     """First screen: collect a company profile, then expose the model and its research evidence."""
     profile = st.session_state.setdefault("company_profile", default_profile())
     ready = st.session_state.get("profile_ready", False)
-    st.markdown(
-        "<section class='decision-window'><div class='decision-window__eyebrow'>TSAD · COMPANY DECISION WINDOW</div>"
-        "<h1>우리 환경에서,<br>무엇을 먼저 검토해야 할까요?</h1>"
-        "<p class='decision-window__copy'>데이터 규모·채널·인프라를 입력하면 현재 가능한 모델군과 다음 재평가 시점, 그리고 그 추천을 읽는 데 필요한 최신 논문 근거를 함께 정리합니다.</p></section>",
-        unsafe_allow_html=True,
-    )
+    if not ready:
+        st.markdown(
+            "<section class='start-stage'><div class='start-stage__grid'></div><div class='signal-logo'>"
+            "<svg class='signal-logo__aperture' viewBox='0 0 300 252' role='img' aria-label='Signal Aperture logo'>"
+            "<defs><linearGradient id='aperture-gradient' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#f5efff'/><stop offset='.52' stop-color='#ae7aff'/><stop offset='1' stop-color='#6e37d2'/></linearGradient></defs>"
+            "<circle class='aperture-ring' cx='150' cy='126' r='102' stroke-dasharray='8 12'/><circle class='aperture-ring' cx='150' cy='126' r='68' stroke-dasharray='3 10'/>"
+            "<path class='aperture-trace' d='M32 202 C83 202 78 143 124 130 C145 124 151 103 150 72 C149 44 174 35 233 35'/><path class='aperture-trace aperture-trace--inner' d='M32 127 C88 127 95 101 128 111 C146 116 150 130 172 137 C195 145 203 188 268 188'/><path class='aperture-trace aperture-trace--inner' d='M66 228 C113 228 116 179 140 153 C152 140 161 135 177 129 C209 116 204 65 267 65'/><circle class='aperture-core' cx='150' cy='126' r='13'/></svg>"
+            "<div class='signal-logo__name'>SIGNAL APERTURE</div><div class='signal-logo__sub'>TIME SERIES ANOMALY DECISION</div></div>"
+            "<p class='start-stage__statement'>데이터가 부족한 지금부터,<br>다음 모델 전환의 순간까지.</p>"
+            "<div class='start-stage__cue'>↓ START A COMPANY DECISION</div></section>"
+            "<section class='decision-window'><div class='decision-window__eyebrow'>COMPANY DECISION WINDOW</div>"
+            "<h1>우리 환경에서,<br>무엇을 먼저 검토해야 할까요?</h1>"
+            "<p class='decision-window__copy'>데이터 규모·채널·인프라를 입력하면 현재 가능한 모델군과 다음 재평가 시점, 그리고 그 추천을 읽는 데 필요한 최신 논문 근거를 함께 정리합니다.</p></section>",
+            unsafe_allow_html=True,
+        )
 
     if not ready:
         with st.form("company-decision-form", border=False):
             st.markdown("<section class='intake-panel'><div class='intake-step'>01 · DATA PROFILE</div><div class='intake-heading'>기업 데이터와 운영 조건</div>", unsafe_allow_html=True)
+            st.markdown("<div class='unknown-choice'>정확한 데이터 규모를 아직 모르더라도 시작할 수 있습니다. 체크하면 실제 값으로 단정하지 않고, 보수적인 Cold Start 조건으로만 후보를 제안합니다.</div>", unsafe_allow_html=True)
+            data_unknown = st.checkbox("기업 데이터·운영 조건을 아직 모르겠어요", value=not bool(profile.get("data_known", True)))
             upload = st.file_uploader("데이터셋 파일 업로드 (CSV, 선택)", type=["csv"], help="파일을 올리면 row·column 수를 참고합니다. 원본 파일은 이 prototype에서 저장하지 않습니다.")
             data_a, data_b, data_c = st.columns(3)
             normal_rows = data_a.number_input("현재 정상 데이터 rows", min_value=1_000, max_value=100_000_000, value=int(profile["normal_rows"]), step=1_000)
@@ -511,6 +547,8 @@ def decision_window() -> None:
             retention_value = retention.text_input("데이터 저장 기간", value=str(profile["retention"]), placeholder="예: 12 months")
             realtime_value = realtime.toggle("Real-time 탐지 필요", value=bool(profile["realtime"]))
             st.markdown("<hr class='intake-rule'><div class='intake-step'>02 · OPERATING CONSTRAINTS</div><div class='intake-heading'>현재 운영 인프라</div>", unsafe_allow_html=True)
+            st.markdown("<div class='unknown-choice'>GPU·CPU·메모리 사양을 모르겠다면 체크하세요. GPU 없는 환경으로 가정해 실행 가능성이 확실한 모델군부터 제안합니다.</div>", unsafe_allow_html=True)
+            infra_unknown = st.checkbox("현재 운영 인프라를 아직 모르겠어요", value=not bool(profile.get("infra_known", True)))
             infra_a, infra_b, infra_c, infra_d = st.columns(4)
             cpu = infra_a.number_input("CPU core", min_value=1, max_value=512, value=int(profile["cpu"]), step=1)
             ram = infra_b.number_input("RAM (GiB)", min_value=1, max_value=4096, value=int(profile["ram"]), step=1)
@@ -535,13 +573,21 @@ def decision_window() -> None:
                     upload_note = f"{upload.name} · {uploaded_frame.shape[0]:,} rows · {uploaded_frame.shape[1]:,} columns"
                 except Exception:
                     upload_note = f"{upload.name} · 구조를 읽지 못해 수동 입력값을 사용"
+            if data_unknown:
+                normal_rows, target_rows, channels = 5_000, 100_000, 8
+                frequency_value, retention_value, realtime_value = "미확인", "미확인", False
+                upload_note = "데이터 정보 미확인 · Cold Start 보수 가정(실제 기업 값 아님)"
+            if infra_unknown:
+                cpu, ram, vram, daily_rows = 1, 1, 0.0, 1_000
+                latency_value, retraining_value = "Batch", "필요 시"
+                upload_note += " · 인프라 정보 미확인(GPU 없음 가정)"
             st.session_state.company_profile = {
                 "normal_rows": int(normal_rows), "target_rows": int(max(target_rows, normal_rows)), "channels": int(channels),
                 "frequency": frequency_value, "retention": retention_value, "realtime": realtime_value,
                 "latency": latency_value, "retraining": retraining_value, "cpu": int(cpu), "ram": int(ram),
                 "vram": float(vram), "daily_rows": int(daily_rows), "perf_weight": int(weight_value),
                 "acquisition_per_10k": int(acquisition_value), "gpu_hourly": int(gpu_hourly_value),
-                "upload_note": upload_note,
+                "upload_note": upload_note, "data_known": not data_unknown, "infra_known": not infra_unknown,
             }
             st.session_state.profile_ready = True
             st.rerun()
@@ -766,6 +812,10 @@ else:
         )
         st.markdown("</div>", unsafe_allow_html=True)
     with controls:
+        if st.button("← 처음으로", key="back-to-company-window", use_container_width=True):
+            st.session_state.app_view = "intake"
+            st.session_state.profile_ready = False
+            st.rerun()
         with st.popover("기업 프로필"):
             st.markdown("<div class='control-kicker'>COMPANY PROFILE</div><p class='control-copy'>첫 화면에서 입력한 조건을 바탕으로 현재 분석 화면을 계산하고 있습니다.</p>", unsafe_allow_html=True)
             st.write(f"**{profile['normal_rows']:,} / {profile['target_rows']:,} 정상 rows** · {profile['channels']} channels")
