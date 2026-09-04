@@ -77,6 +77,52 @@ MODEL_DATA = {
 
 PALETTE = {"MWVAR": "#8da2b6", "GDN": "#45d5b0", "PaAno": "#7b8cff", "TSPulse": "#eeae57"}
 
+# These are research references, not a claim that a paper's method is identical
+# to the selected implementation.  They are surfaced beside a recommendation so
+# a decision maker can immediately inspect the modelling rationale.
+PAPER_LIBRARY = {
+    "baseline": {
+        "title": "Position: Quo Vadis, Unsupervised Time Series Anomaly Detection?",
+        "venue": "ICML 2024",
+        "summary": "복잡한 모델 전환 전에 단순·해석 가능한 기준선과 공정한 벤치마크를 먼저 검증해야 한다는 관점을 제시합니다.",
+        "pdf": "https://proceedings.mlr.press/v235/sarfraz24a/sarfraz24a.pdf",
+        "paper": "https://proceedings.mlr.press/v235/sarfraz24a.html",
+        "code": "",
+    },
+    "catch": {
+        "title": "CATCH: Channel-Aware Multivariate Time Series Anomaly Detection via Frequency Patching",
+        "venue": "ICLR 2025",
+        "summary": "주파수 대역별 패치와 채널 상관관계를 함께 학습해 다변량 이상 구간을 재구성 기반으로 포착합니다.",
+        "pdf": "https://proceedings.iclr.cc/paper_files/paper/2025/file/2b25c39788e5cf11d3541de433ebf4c0-Paper-Conference.pdf",
+        "paper": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/2b25c39788e5cf11d3541de433ebf4c0-Abstract-Conference.html",
+        "code": "https://github.com/decisionintelligence/CATCH",
+    },
+    "sarad": {
+        "title": "SARAD: Spatial Association-Aware Anomaly Detection and Diagnosis for Multivariate Time Series",
+        "venue": "NeurIPS 2024",
+        "summary": "센서 간 공간적 연관성의 변화까지 모델링해 다변량 공정 데이터의 탐지와 진단을 함께 다룹니다.",
+        "pdf": "https://proceedings.neurips.cc/paper_files/paper/2024/file/56ad264ac7448239145606cf4106042f-Paper-Conference.pdf",
+        "paper": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/56ad264ac7448239145606cf4106042f-Abstract-Conference.html",
+        "code": "",
+    },
+    "timeinf": {
+        "title": "TimeInf: Time Series Data Contribution via Influence Functions",
+        "venue": "ICLR 2025",
+        "summary": "각 시점이 예측에 미치는 영향을 추적해 이상 탐지 결과를 더 설명 가능하게 만드는 model-agnostic 접근입니다.",
+        "pdf": "https://arxiv.org/pdf/2407.15247",
+        "paper": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/214382ea2931ca1637ebd7d15ef4b454-Abstract-Conference.html",
+        "code": "https://github.com/yzhang511/TimeInf",
+    },
+    "units": {
+        "title": "UniTS: A Unified Multi-Task Time Series Model",
+        "venue": "NeurIPS 2024",
+        "summary": "이질적인 시계열을 공통 표현으로 옮겨 few-shot·prompt 방식의 다양한 downstream task에 전이합니다.",
+        "pdf": "https://proceedings.neurips.cc/paper_files/paper/2024/file/fe248e22b241ae5a9adf11493c8c12bc-Paper-Conference.pdf",
+        "paper": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/fe248e22b241ae5a9adf11493c8c12bc-Abstract-Conference.html",
+        "code": "https://github.com/mims-harvard/UniTS",
+    },
+}
+
 
 def inject_css() -> None:
     st.markdown("""
@@ -247,6 +293,35 @@ def inject_css() -> None:
       [data-testid="stPlotlyChart"] { border-color:#e5e1e9; border-radius:0; padding:8px; }
       .model-card { border-radius:0; }
       .roadmap-card, .architecture-card { border-radius:0; }
+      .decision-window { margin:0 auto; max-width:1040px; padding:64px 0 48px; }
+      .decision-window__eyebrow { color:#6937c8; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11px; font-weight:750; letter-spacing:.13em; text-align:center; }
+      .decision-window h1 { color:#17121e; font-size:clamp(40px, 5.4vw, 70px); font-weight:790; letter-spacing:-.08em; line-height:1.04; margin:18px auto; max-width:900px; text-align:center; }
+      .decision-window__copy { color:#756e7b; font-size:15px; line-height:1.7; margin:0 auto 42px; max-width:620px; text-align:center; }
+      .intake-panel { background:#f7f6f8; border-top:2px solid #17121e; padding:29px; }
+      .intake-step { color:#6d36ca; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:750; letter-spacing:.12em; margin-bottom:8px; }
+      .intake-heading { color:#1c1624; font-size:21px; font-weight:760; letter-spacing:-.05em; margin-bottom:22px; }
+      .intake-rule { border:0; border-top:1px solid #ded9e4; margin:25px 0; }
+      .intake-note { color:#776d83; font-size:12px; line-height:1.6; margin-top:10px; }
+      .decision-summary { background:#1b1328; color:#fff; margin:0 auto; max-width:1120px; padding:30px; }
+      .decision-summary__label { color:#c9b3ff; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:700; letter-spacing:.12em; }
+      .decision-summary h2 { font-size:clamp(30px, 4vw, 49px); font-weight:770; letter-spacing:-.07em; line-height:1.05; margin:13px 0 10px; }
+      .decision-summary p { color:#ddd3ea; font-size:14px; line-height:1.65; margin:0; }
+      .paper-section { border-top:1px solid #1d1625; margin-top:30px; padding-top:18px; }
+      .paper-section__heading { align-items:baseline; display:flex; gap:12px; justify-content:space-between; margin-bottom:13px; }
+      .paper-section__heading strong { color:#1b1328; font-size:20px; font-weight:760; letter-spacing:-.05em; }
+      .paper-section__heading span { color:#776d83; font-size:12px; }
+      .paper-grid { display:grid; gap:1px; grid-template-columns:repeat(2, minmax(0,1fr)); background:#ded9e4; border:1px solid #ded9e4; }
+      .paper-card { background:#fff; min-height:180px; padding:19px; transition:background .2s ease, transform .2s ease; }
+      .paper-card:hover { background:#faf7ff; transform:translateY(-3px); }
+      .paper-venue { color:#6b32cc; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:750; letter-spacing:.08em; }
+      .paper-title { color:#1d1625; font-size:15px; font-weight:730; letter-spacing:-.03em; line-height:1.35; margin:10px 0 9px; }
+      .paper-summary { color:#716877; font-size:12px; line-height:1.55; margin:0; }
+      .paper-links { display:flex; flex-wrap:wrap; gap:12px; margin-top:15px; }
+      .paper-links a { border-bottom:1px solid #1d1625; color:#1d1625; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:10px; font-weight:750; letter-spacing:.05em; padding-bottom:2px; text-decoration:none; }
+      .paper-links a:hover { color:#6d36ca; border-color:#6d36ca; }
+      .recommendation-actions { display:flex; gap:10px; margin:24px auto 0; max-width:1120px; }
+      .recommendation-actions [data-testid="stButton"] { flex:1; }
+      .recommendation-actions .stButton > button { border-radius:0; width:100%; }
       .app-intro { align-items:center; animation:intro-out .7s ease 1.6s forwards; background:radial-gradient(circle at 68% 28%, #5d3693 0%, #241437 42%, #120d20 100%); color:#fff; display:flex; flex-direction:column; inset:0; justify-content:center; padding:24px; pointer-events:none; position:fixed; text-align:center; z-index:999999; }
       .app-intro__halo { animation:halo-pulse 1.6s ease-in-out infinite; border:1px solid rgba(222,208,255,.38); border-radius:50%; height:146px; position:absolute; width:146px; }
       .app-intro__mark { animation:intro-rise .55s cubic-bezier(.2,.8,.2,1) both; background:rgba(237,229,255,.12); border:1px solid rgba(237,229,255,.28); border-radius:18px; box-shadow:0 20px 48px rgba(0,0,0,.22); color:#fff; font-size:24px; font-weight:760; letter-spacing:-.06em; padding:18px 20px; }
@@ -293,6 +368,12 @@ def inject_css() -> None:
         .signal-orbit { height:188px; width:188px; }
         .signal-orbit:before { height:136px; width:136px; }
         .signal-orbit:after { height:244px; width:244px; }
+        .decision-window { padding:38px 0 34px; }
+        .decision-window h1 { font-size:43px; }
+        .intake-panel { padding:21px 17px; }
+        .paper-grid { grid-template-columns:1fr; }
+        .paper-section__heading { align-items:flex-start; flex-direction:column; gap:4px; }
+        .recommendation-actions { flex-direction:column; }
       }
     </style>
     """, unsafe_allow_html=True)
@@ -306,7 +387,7 @@ def next_checkpoint(q: int) -> int | None:
     return next((v for v in CHECKPOINTS if v > q), None)
 
 
-def availability(percent: int, vram: float) -> tuple[list[str], list[str]]:
+def availability(percent: int, vram: float, channels: int | None = None) -> tuple[list[str], list[str]]:
     viable, blocked = [], []
     for name in ("MWVAR", "GDN", "PaAno", "TSPulse"):
         item = MODEL_DATA[name]
@@ -316,6 +397,8 @@ def availability(percent: int, vram: float) -> tuple[list[str], list[str]]:
             blocked.append(f"{name}: 현재 recipe의 peak GPU memory {item['gpu_gib']:.2f} GiB 필요")
         else:
             viable.append(name)
+    if channels is not None and channels < 8:
+        blocked.append("ALoRa: 현재 recipe는 channel 8개 미만에서 공통 후보로 비교할 수 없음")
     return viable, blocked
 
 
@@ -364,10 +447,139 @@ def show_intro() -> None:
         st.session_state.intro_seen = True
 
 
-def dashboard(percent: int, target_rows: int, vram: float, perf_weight: int, realtime: bool, daily_rows: int, acquisition_per_10k: float, gpu_hourly: float) -> None:
+def paper_keys_for(model: str) -> list[str]:
+    """Return modelling references that explain, rather than replace, the model choice."""
+    if model == "MWVAR":
+        return ["baseline", "timeinf"]
+    if model in {"GDN", "PaAno"}:
+        return ["catch", "sarad"]
+    return ["units", "timeinf"]
+
+
+def research_panel(model: str, label: str = "추천 모델군을 이해하는 연구 근거") -> None:
+    cards = []
+    for key in paper_keys_for(model):
+        paper = PAPER_LIBRARY[key]
+        links = f"<a href='{paper['pdf']}' target='_blank' rel='noopener'>PDF 열기 ↗</a><a href='{paper['paper']}' target='_blank' rel='noopener'>공식 페이지 ↗</a>"
+        if paper["code"]:
+            links += f"<a href='{paper['code']}' target='_blank' rel='noopener'>코드 ↗</a>"
+        cards.append(
+            f"<article class='paper-card'><div class='paper-venue'>{paper['venue']}</div>"
+            f"<div class='paper-title'>{paper['title']}</div><p class='paper-summary'>{paper['summary']}</p>"
+            f"<div class='paper-links'>{links}</div></article>"
+        )
+    st.markdown(
+        f"<section class='paper-section'><div class='paper-section__heading'><strong>{label}</strong>"
+        f"<span>논문은 추천 모델과 같은 계열의 참고 근거이며, 해당 구현 자체를 뜻하지 않습니다.</span></div>"
+        f"<div class='paper-grid'>{''.join(cards)}</div></section>",
+        unsafe_allow_html=True,
+    )
+
+
+def default_profile() -> dict[str, object]:
+    return {
+        "normal_rows": 27_000, "target_rows": 100_000, "channels": 18,
+        "frequency": "1 min", "retention": "12 months", "realtime": True,
+        "latency": "1 min 이내", "retraining": "월 1회", "cpu": 4, "ram": 16,
+        "vram": 16.0, "daily_rows": 100_000, "perf_weight": 70,
+        "acquisition_per_10k": 300_000, "gpu_hourly": 4_000,
+        "upload_note": "파일 미업로드 · 입력값 기반 프로파일",
+    }
+
+
+def decision_window() -> None:
+    """First screen: collect a company profile, then expose the model and its research evidence."""
+    profile = st.session_state.setdefault("company_profile", default_profile())
+    ready = st.session_state.get("profile_ready", False)
+    st.markdown(
+        "<section class='decision-window'><div class='decision-window__eyebrow'>TSAD · COMPANY DECISION WINDOW</div>"
+        "<h1>우리 환경에서,<br>무엇을 먼저 검토해야 할까요?</h1>"
+        "<p class='decision-window__copy'>데이터 규모·채널·인프라를 입력하면 현재 가능한 모델군과 다음 재평가 시점, 그리고 그 추천을 읽는 데 필요한 최신 논문 근거를 함께 정리합니다.</p></section>",
+        unsafe_allow_html=True,
+    )
+
+    if not ready:
+        with st.form("company-decision-form", border=False):
+            st.markdown("<section class='intake-panel'><div class='intake-step'>01 · DATA PROFILE</div><div class='intake-heading'>기업 데이터와 운영 조건</div>", unsafe_allow_html=True)
+            upload = st.file_uploader("데이터셋 파일 업로드 (CSV, 선택)", type=["csv"], help="파일을 올리면 row·column 수를 참고합니다. 원본 파일은 이 prototype에서 저장하지 않습니다.")
+            data_a, data_b, data_c = st.columns(3)
+            normal_rows = data_a.number_input("현재 정상 데이터 rows", min_value=1_000, max_value=100_000_000, value=int(profile["normal_rows"]), step=1_000)
+            target_rows = data_b.number_input("목표 정상 데이터 rows", min_value=1_000, max_value=100_000_000, value=int(profile["target_rows"]), step=1_000)
+            channels = data_c.number_input("channel 수", min_value=1, max_value=10_000, value=int(profile["channels"]), step=1)
+            frequency, retention, realtime = st.columns(3)
+            frequency_value = frequency.text_input("데이터 frequency", value=str(profile["frequency"]), placeholder="예: 1 min")
+            retention_value = retention.text_input("데이터 저장 기간", value=str(profile["retention"]), placeholder="예: 12 months")
+            realtime_value = realtime.toggle("Real-time 탐지 필요", value=bool(profile["realtime"]))
+            st.markdown("<hr class='intake-rule'><div class='intake-step'>02 · OPERATING CONSTRAINTS</div><div class='intake-heading'>현재 운영 인프라</div>", unsafe_allow_html=True)
+            infra_a, infra_b, infra_c, infra_d = st.columns(4)
+            cpu = infra_a.number_input("CPU core", min_value=1, max_value=512, value=int(profile["cpu"]), step=1)
+            ram = infra_b.number_input("RAM (GiB)", min_value=1, max_value=4096, value=int(profile["ram"]), step=1)
+            vram = infra_c.number_input("GPU VRAM (GiB)", min_value=0.0, max_value=256.0, value=float(profile["vram"]), step=1.0)
+            daily_rows = infra_d.number_input("하루 처리 rows", min_value=1_000, max_value=100_000_000, value=int(profile["daily_rows"]), step=1_000)
+            latency, retraining, weight = st.columns(3)
+            latency_value = latency.selectbox("허용 latency", ["1 sec 이내", "1 min 이내", "1 hour 이내", "Batch"], index=["1 sec 이내", "1 min 이내", "1 hour 이내", "Batch"].index(str(profile["latency"])))
+            retraining_value = retraining.selectbox("재학습 주기", ["매일", "주 1회", "월 1회", "필요 시"], index=["매일", "주 1회", "월 1회", "필요 시"].index(str(profile["retraining"])))
+            weight_value = weight.slider("성능 중요도", min_value=0, max_value=100, value=int(profile["perf_weight"]), help="높을수록 현재 Dev18 성능값에 더 큰 가중치를 둡니다.")
+            data_cost, gpu_cost = st.columns(2)
+            acquisition_value = data_cost.number_input("정상 데이터 1만 rows 확보비용 (₩)", min_value=0, max_value=100_000_000, value=int(profile["acquisition_per_10k"]), step=10_000)
+            gpu_hourly_value = gpu_cost.number_input("GPU 시간당 비용 가정 (₩)", min_value=0, max_value=100_000, value=int(profile["gpu_hourly"]), step=500)
+            st.markdown("<p class='intake-note'>비용과 재학습 시간은 현재 사용자가 입력한 가정과 Dev18 관측치만 사용합니다. GHL·HAI 외부 검증 및 실제 GPU-hour 결과는 연결 전까지 ‘추가 측정 필요’로 표시합니다.</p></section>", unsafe_allow_html=True)
+            submitted = st.form_submit_button("기업 맞춤 제안 만들기", use_container_width=True)
+
+        if submitted:
+            upload_note = "파일 미업로드 · 입력값 기반 프로파일"
+            if upload is not None:
+                try:
+                    uploaded_frame = pd.read_csv(upload)
+                    channels = int(uploaded_frame.shape[1])
+                    upload_note = f"{upload.name} · {uploaded_frame.shape[0]:,} rows · {uploaded_frame.shape[1]:,} columns"
+                except Exception:
+                    upload_note = f"{upload.name} · 구조를 읽지 못해 수동 입력값을 사용"
+            st.session_state.company_profile = {
+                "normal_rows": int(normal_rows), "target_rows": int(max(target_rows, normal_rows)), "channels": int(channels),
+                "frequency": frequency_value, "retention": retention_value, "realtime": realtime_value,
+                "latency": latency_value, "retraining": retraining_value, "cpu": int(cpu), "ram": int(ram),
+                "vram": float(vram), "daily_rows": int(daily_rows), "perf_weight": int(weight_value),
+                "acquisition_per_10k": int(acquisition_value), "gpu_hourly": int(gpu_hourly_value),
+                "upload_note": upload_note,
+            }
+            st.session_state.profile_ready = True
+            st.rerun()
+        return
+
+    percent = min(100, round(int(profile["normal_rows"]) / int(profile["target_rows"]) * 100))
+    q = checkpoint_for(max(5, percent))
+    viable, blocked = availability(q, float(profile["vram"]), int(profile["channels"]))
+    recommended = choose_model(viable, int(profile["perf_weight"]), bool(profile["realtime"]))
+    family = "경량·통계 기반" if recommended == "MWVAR" else ("target 학습형 다변량" if recommended in {"GDN", "PaAno"} else "zero-shot / foundation")
+    next_q = next_checkpoint(q)
+    st.markdown(
+        f"<section class='decision-summary'><div class='decision-summary__label'>YOUR PROPOSAL · {q}% REFERENCE BAND</div>"
+        f"<h2>{family} · {recommended}</h2><p>{profile['normal_rows']:,} 정상 rows · {profile['channels']} channels · {profile['vram']:g} GiB VRAM · {profile['latency']} 조건을 기준으로 제안했습니다. "
+        f"다음 검토 지점은 {next_q if next_q else '최종'}%입니다. {profile['upload_note']}</p></section>",
+        unsafe_allow_html=True,
+    )
+    st.caption(f"유사 실험 구간: 현재 입력은 Dev18의 {q}% checkpoint와 가장 가깝습니다. GHL·HAI의 row·channel·frequency별 외부 검증 결과는 연결 후 같은 방식으로 함께 매칭합니다.")
+    if blocked:
+        st.markdown("<div class='warn'><b>현재 제외 또는 검토 필요</b><br>" + "<br>".join(f"• {reason}" for reason in blocked) + "</div>", unsafe_allow_html=True)
+    research_panel(recommended, f"{recommended} 제안을 읽는 대표 논문")
+    st.markdown("<div class='recommendation-actions'>", unsafe_allow_html=True)
+    open_studio, revise = st.columns(2)
+    with open_studio:
+        if st.button("맞춤 Decision Studio 열기", type="primary", use_container_width=True):
+            st.session_state.app_view = "studio"
+            st.rerun()
+    with revise:
+        if st.button("입력값 다시 보기", use_container_width=True):
+            st.session_state.profile_ready = False
+            st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def dashboard(percent: int, target_rows: int, vram: float, perf_weight: int, realtime: bool, daily_rows: int, acquisition_per_10k: float, gpu_hourly: float, channels: int | None = None) -> None:
     q = checkpoint_for(percent)
     upcoming = next_checkpoint(q)
-    viable, blocked = availability(q, vram)
+    viable, blocked = availability(q, vram, channels)
     recommendation = choose_model(viable, perf_weight, realtime)
     current_rows = round(target_rows * percent / 100)
     to_next_rows = 0 if upcoming is None else max(0, round(target_rows * (upcoming - percent) / 100))
@@ -417,6 +629,20 @@ def dashboard(percent: int, target_rows: int, vram: float, perf_weight: int, rea
         st.metric("컴퓨팅 비용", gpu_note)
         st.caption(f"참고 GPU 시간당 요금: ₩{gpu_hourly:,.0f} (사용자 가정)")
 
+    research_panel(recommendation, f"{recommendation} 추천과 함께 보는 대표 논문")
+
+    st.markdown("<div class='section-title'>Data investment vs. model change</div><p class='section-sub'>같은 성능 변화라도 ‘데이터를 더 확보하는 경로’와 ‘모델을 바꾸는 경로’의 근거와 비용은 다르게 관리합니다.</p>", unsafe_allow_html=True)
+    data_path, model_path = st.columns(2)
+    with data_path:
+        next_label = f"{upcoming}% checkpoint" if upcoming else "최종 checkpoint"
+        st.markdown(f"<div class='architecture-card'><strong>A · 데이터 추가 확보</strong><br><span>{next_label}까지 약 {to_next_rows:,} 정상 rows를 추가 확보합니다.<br><br><b>입력 기반 투자 추정:</b> ₩{acq_cost:,.0f}<br><b>성능 근거:</b> 해당 구간의 관측 VUS-PR이 있는 모델만 비교합니다.</span></div>", unsafe_allow_html=True)
+    with model_path:
+        gain = None
+        if performance is not None and q <= 20 and OBSERVED_VUS["PaAno"].get(40) is not None:
+            gain = OBSERVED_VUS["PaAno"][40] - performance
+        gain_line = f"후보 비교 ΔVUS-PR: +{gain:.3f} (Dev18 구간 간 참고치)" if gain is not None else "현재 수치만으로는 신뢰할 수 있는 ΔVUS-PR 산정이 어렵습니다."
+        st.markdown(f"<div class='architecture-card'><strong>B · 모델 계열 전환</strong><br><span>재학습·검증·배포 비용은 별도 기록이 필요합니다.<br><br><b>{gain_line}</b><br>GPU-hour·train seconds·artifact size를 확보한 뒤 재학습 주기별 연간 비용으로 환산합니다.</span></div>", unsafe_allow_html=True)
+
     st.markdown("<div class='section-title'>Model switching timeline</div><p class='section-sub'>각 점은 모델을 자동으로 바꾸라는 의미가 아니라, 새 후보를 검증할 가장 이른 시점입니다.</p>", unsafe_allow_html=True)
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=CHECKPOINTS, y=[1] * len(CHECKPOINTS), mode="lines+markers", line=dict(color="#bfd0df", width=2), marker=dict(color="#ffffff", size=13, line=dict(color="#607892", width=2),), hoverinfo="skip"))
@@ -460,6 +686,14 @@ def portfolio() -> None:
             item = MODEL_DATA[name]
             gpu = "공통 후보 불가" if item["gpu_gib"] is None else ("GPU 불필요" if item["gpu_gib"] == 0 else f"peak {item['gpu_gib']:.2f} GiB")
             col.markdown(f"<div class='model-card'><span class='badge'>{item['tier']} · {item['status']}</span><br><strong>{name}</strong><span>{item['kind']} · {item['desc']}<br><br>학습: {item['training']} &nbsp; | &nbsp; GPU: {gpu} &nbsp; | &nbsp; Latency: {item['latency']}</span></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>Reproduction guidance</div><p class='section-sub'>아래는 현재 recipe를 다시 실행하기 위한 권장 환경이며, 제품 운영의 최소 사양으로 단정하지 않습니다.</p>", unsafe_allow_html=True)
+    guidance = pd.DataFrame([
+        {"Model": "MWVAR", "GPU": "불필요", "RAM": "8 GiB+", "CPU": "2 vCPU+", "학습": "불필요"},
+        {"Model": "GDN", "GPU": "24 GiB VRAM급 권장", "RAM": "16 GiB+", "CPU": "4 vCPU+", "학습": "필요"},
+        {"Model": "PaAno", "GPU": "peak 0.53 GiB 관측", "RAM": "16 GiB+", "CPU": "4 vCPU+", "학습": "필요"},
+        {"Model": "TSPulse", "GPU": "peak 8.23 GiB 관측", "RAM": "추가 측정", "CPU": "추가 측정", "학습": "target 학습 불필요"},
+    ])
+    st.dataframe(guidance, hide_index=True, use_container_width=True)
     st.markdown("<div class='warn'><b>해석 가드레일</b><br>‘Tier 3 = 저비용’, ‘40% = PaAno의 실제 최소 데이터량’, ‘Dev18 우세 = 현장 일반화’는 현재 근거로 주장하지 않습니다. 각 항목은 본 실험의 비용·외부 검증으로 확인해야 합니다.</div>", unsafe_allow_html=True)
 
 
@@ -482,6 +716,16 @@ def evidence() -> None:
         st.markdown("<div class='architecture-join'>+</div>", unsafe_allow_html=True)
     with b:
         st.markdown("<div class='architecture-card'><strong>Data investment cost</strong><br><span>기업별 입력: 정상 운전 비용, 센서 운영, 저장, 기회비용.<br>→ 현재 데이터에서 다음 checkpoint까지의 투자 추정</span></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>Service coverage</div><p class='section-sub'>웹서비스에서 바로 쓰는 판단과, 실험 결과가 연결되어야 확정되는 판단을 분리합니다.</p>", unsafe_allow_html=True)
+    coverage = pd.DataFrame([
+        {"기능": "CSV row · column 프로파일", "상태": "현재 사용", "처리": "업로드 메타데이터와 수동 정상 구간 입력"},
+        {"기능": "GHL · HAI 유사 구간 매칭", "상태": "결과 연결 예정", "처리": "row · channel · frequency 기준의 가장 가까운 실험 조건"},
+        {"기능": "VUS-PR · Tier · 전환 시점", "상태": "Dev18 사용", "처리": "관측값과 candidate milestone을 분리 표기"},
+        {"기능": "Training / inference / 재학습 비용", "상태": "추가 측정", "처리": "GPU-hour · CPU-hour · peak RAM · artifact size"},
+        {"기능": "FP / FN 사업 비용", "상태": "방법론 확정 필요", "처리": "threshold·오탐·미탐 비용을 기업별 입력으로 설계"},
+        {"기능": "추천 논문 · PDF · 코드", "상태": "현재 사용", "처리": "추천 모델군과 함께 공식 링크를 제공"},
+    ])
+    st.dataframe(coverage, hide_index=True, use_container_width=True)
     st.markdown("<div class='section-title'>Recommended experimental log</div>", unsafe_allow_html=True)
     st.code("checkpoint, model, seed, normal_rows, train_seconds, inference_rows, inference_seconds, gpu_hours, cpu_hours, peak_vram_gib, peak_ram_gib, artifact_mb, vus_pr, family, run_id", language="text")
     st.caption("위 스키마의 CSV/JSONL을 연결하면, 현재 prototype의 정적 evidence 영역을 재현 가능한 실험 데이터로 교체할 수 있습니다.")
@@ -490,46 +734,55 @@ def evidence() -> None:
 inject_css()
 show_intro()
 
-# A compact command bar replaces the conventional left rail.  The exact input
-# widgets and their values are intentionally kept intact so the decision logic
-# below remains unchanged.
-brand, navigation, controls = st.columns([1.05, 2.45, 0.82], gap="small")
-with brand:
-    st.markdown(
-        "<div class='top-brand'><span class='top-brand__symbol'>◈</span>"
-        "<div><strong>TSAD</strong><small>DECISION STUDIO</small></div></div>",
-        unsafe_allow_html=True,
-    )
-with navigation:
-    st.markdown("<div class='workspace-nav'>", unsafe_allow_html=True)
-    page = st.radio(
-        "Workspace navigation",
-        ["Decision studio", "Model portfolio", "Evidence & roadmap"],
-        horizontal=True,
-        label_visibility="collapsed",
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-with controls:
-    with st.popover("환경 설정"):
-        st.markdown("<div class='control-kicker'>CONTROL ROOM</div><p class='control-copy'>입력값을 바꾸면 아래 의사결정 화면이 즉시 다시 계산됩니다.</p>", unsafe_allow_html=True)
-        target_rows = st.number_input("목표 정상 데이터 rows", min_value=10_000, max_value=10_000_000, value=100_000, step=10_000)
-        percent = st.slider("현재 정상 데이터 확보율", min_value=5, max_value=100, value=27, step=1, format="%d%%")
-        vram = st.number_input("사용 가능 GPU VRAM (GiB)", min_value=0.0, max_value=256.0, value=16.0, step=1.0)
-        realtime = st.toggle("Real-time 탐지", value=True)
-        daily_rows = st.number_input("하루 처리 데이터 (rows)", min_value=1_000, max_value=100_000_000, value=100_000, step=1_000)
-        st.markdown("---")
-        st.markdown("<div class='control-kicker'>DECISION ASSUMPTIONS</div>", unsafe_allow_html=True)
-        perf_weight = st.slider("성능 중요도", min_value=0, max_value=100, value=70, help="높을수록 Dev18 성능에 더 큰 가중치를 둡니다. 실제 cost index가 확정되면 교체하세요.")
-        acquisition_per_10k = st.number_input("정상 데이터 1만 rows 확보비용 (₩)", min_value=0, max_value=100_000_000, value=300_000, step=10_000)
-        gpu_hourly = st.number_input("GPU 시간당 비용 가정 (₩)", min_value=0, max_value=100_000, value=4_000, step=500)
-        st.caption("DEV18 · PROTOTYPE · NOT A PRODUCTION CLAIM")
-
-st.markdown("<div class='workspace-rule'></div>", unsafe_allow_html=True)
-
-if page == "Decision studio":
-    dashboard(percent, int(target_rows), vram, perf_weight, realtime, int(daily_rows), acquisition_per_10k, gpu_hourly)
-elif page == "Model portfolio":
-    portfolio()
+if st.session_state.get("app_view", "intake") != "studio":
+    decision_window()
 else:
-    evidence()
+    # The analytical views receive the values collected in the company decision
+    # window.  The main dashboard logic remains the same after this hand-off.
+    profile = st.session_state.setdefault("company_profile", default_profile())
+    target_rows = int(profile["target_rows"])
+    percent = min(100, max(5, round(int(profile["normal_rows"]) / target_rows * 100)))
+    vram = float(profile["vram"])
+    realtime = bool(profile["realtime"])
+    daily_rows = int(profile["daily_rows"])
+    perf_weight = int(profile["perf_weight"])
+    acquisition_per_10k = int(profile["acquisition_per_10k"])
+    gpu_hourly = int(profile["gpu_hourly"])
+
+    brand, navigation, controls = st.columns([1.05, 2.45, 0.82], gap="small")
+    with brand:
+        st.markdown(
+            "<div class='top-brand'><span class='top-brand__symbol'>◈</span>"
+            "<div><strong>TSAD</strong><small>DECISION STUDIO</small></div></div>",
+            unsafe_allow_html=True,
+        )
+    with navigation:
+        st.markdown("<div class='workspace-nav'>", unsafe_allow_html=True)
+        page = st.radio(
+            "Workspace navigation",
+            ["Decision studio", "Model portfolio", "Evidence & roadmap"],
+            horizontal=True,
+            label_visibility="collapsed",
+        )
+        st.markdown("</div>", unsafe_allow_html=True)
+    with controls:
+        with st.popover("기업 프로필"):
+            st.markdown("<div class='control-kicker'>COMPANY PROFILE</div><p class='control-copy'>첫 화면에서 입력한 조건을 바탕으로 현재 분석 화면을 계산하고 있습니다.</p>", unsafe_allow_html=True)
+            st.write(f"**{profile['normal_rows']:,} / {profile['target_rows']:,} 정상 rows** · {profile['channels']} channels")
+            st.write(f"**{profile['cpu']} CPU cores · {profile['ram']} GiB RAM · {profile['vram']:g} GiB VRAM**")
+            st.write(f"{profile['frequency']} · {profile['latency']} · {profile['retraining']}")
+            st.caption(str(profile["upload_note"]))
+            if st.button("기업 의사결정 창으로 돌아가기", use_container_width=True):
+                st.session_state.app_view = "intake"
+                st.session_state.profile_ready = False
+                st.rerun()
+
+    st.markdown("<div class='workspace-rule'></div>", unsafe_allow_html=True)
+
+    if page == "Decision studio":
+        dashboard(percent, target_rows, vram, perf_weight, realtime, daily_rows, acquisition_per_10k, gpu_hourly, int(profile["channels"]))
+    elif page == "Model portfolio":
+        portfolio()
+    else:
+        evidence()
 
